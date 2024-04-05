@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import { useTheme } from '@mui/material';
 import getAllFoodData from './FoodData'; // Make sure this import path is correct
-import './RecipeDialog.css';
+
+import { Box, Tab, Typography as Text } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const RecipeDialog = ({ foodName }) => {
   const [activeTab, setActiveTab] = useState('recipe');
@@ -12,43 +13,21 @@ const RecipeDialog = ({ foodName }) => {
     recipeContent: '',
   });
 
-  const { palette } = useTheme();
-  const tabStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: '1rem',
-  };
-
-  const buttonStyle = {
-    backgroundColor: palette.primary.light,
-    padding: '0.6rem',
-    margin: '0.3rem',
-    border: 'none',
-    cursor: 'pointer',
-  };
-
-  const contentAreaStyle = {
-    maxHeight: '500px',
-    overflowY: 'auto',
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('hi');
         const allData = await getAllFoodData(foodName);
         setData(allData);
       } catch (error) {
         console.error('Failed to fetch recipe data', error);
       }
     };
-
     fetchData();
-  }, [foodName]);
+  }, []);
 
   const renderRecipe = () => (
     <div>
-      <h2>Recipe Ingredients</h2>
       <ul>
         {data.ingredients.map((ingredient, index) => (
           <li key={index}>{ingredient}</li>
@@ -59,7 +38,6 @@ const RecipeDialog = ({ foodName }) => {
 
   const renderNutrition = () => (
     <div>
-      <h2>Nutritional Information</h2>
       <ul>
         {Object.entries(data.nutrients).map(([key, value]) => (
           <li key={key}>
@@ -76,52 +54,58 @@ const RecipeDialog = ({ foodName }) => {
       .split('\n')
       .map((step, index) => step.trim())
       .filter((step) => step.length > 0);
-
     return (
       <div>
-        <h2> Recipe Content</h2>
-        <ol>
-          {steps.map((step, index) => (
-            <li className="list">{step}</li>
-          ))}
-        </ol>
+        {steps.map((step, index) => (
+          <li className="list">{step}</li>
+        ))}
       </div>
     );
   };
 
-  const getContent = () => {
-    switch (activeTab) {
-      case 'recipe':
-        return renderRecipe();
-      case 'nutrition':
-        return renderNutrition();
-      case 'content':
-        return renderContent();
-      default:
-        return <p>Select a tab to view data.</p>;
-    }
+  const [tabValue, setTabValue] = useState();
+  const handleChange = (event, newValue) => {
+    setTabValue(newValue);
   };
-
   return (
-    <div
-      id="recipe-dialog"
-      style={{ display: 'flex', flexDirection: 'column' }}
-    >
-      <div style={tabStyle}>
-        <button style={buttonStyle} onClick={() => setActiveTab('recipe')}>
-          Ingredients
-        </button>
-        <button style={buttonStyle} onClick={() => setActiveTab('nutrition')}>
-          Nutritional Info
-        </button>
-        <button style={buttonStyle} onClick={() => setActiveTab('content')}>
-          Recipe Content
-        </button>
-      </div>
-      <div id="content-area" style={contentAreaStyle}>
-        {data.ingredients.length > 0 ? getContent() : <p>Loading...</p>}
-      </div>
-    </div>
+    <Box>
+      <TabContext value={tabValue}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
+          <TabList onChange={handleChange}>
+            <Tab label="Ingridents" value={'1'} />
+            <Tab label="Nutrition" value={'2'} />
+            <Tab label="Recipe" value={'3'} />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+          {data.ingredients.length > 0 ? (
+            renderRecipe()
+          ) : (
+            <Box sx={{ display: 'flex', paddingLeft: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )}
+        </TabPanel>
+        <TabPanel value="2">
+          {data.ingredients.length > 0 ? (
+            renderNutrition()
+          ) : (
+            <Box sx={{ display: 'flex', paddingLeft: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )}
+        </TabPanel>
+        <TabPanel value="3">
+          {data.ingredients.length > 0 ? (
+            renderContent()
+          ) : (
+            <Box sx={{ display: 'flex', paddingLeft: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )}
+        </TabPanel>
+      </TabContext>
+    </Box>
   );
 };
 
