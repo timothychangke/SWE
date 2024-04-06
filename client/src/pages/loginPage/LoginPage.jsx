@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setLogin } from 'state';
+import { useDispatch} from 'react-redux';
+import { setLogin, setShowAd } from 'state';
 import { useState } from 'react';
 import './Login.css';
 
@@ -215,6 +215,7 @@ function LoginPage() {
         //push a successfull login toast notification
         toast.success('Login successful. Welcome!');
         //authentication is successful and you can navigate home
+        dispatch(setShowAd({ setTo: true }));
         navigate('/home');
       }
     }
