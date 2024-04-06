@@ -13,6 +13,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   //light mode or dark mode
   mode: 'light',
+  //show add mode
+  showAd: true,
   //user information
   user: null,
   //auth token
@@ -38,6 +40,9 @@ export const authSlice = createSlice({
     setMode: (state) => {
       //toggle between light mode and dark mode
       state.mode = state.mode === 'light' ? 'dark' : 'light';
+    },
+    setShowAd: (state, action) => {
+      state.showAd = action.payload.setTo;
     },
     setLogin: (state, action) => {
       //set user state
@@ -83,6 +88,6 @@ export const authSlice = createSlice({
  *
  * @type {*}
  */
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setShowAd } =
   authSlice.actions;
 export default authSlice.reducer
