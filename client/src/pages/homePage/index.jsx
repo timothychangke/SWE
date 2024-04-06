@@ -83,7 +83,7 @@ const HomePage = () => {
                 <Box m="2rem 0" />
               </>
             )}
-            <FriendList userId={_id} />
+            <FriendList userId={_id} isOtherProfile={false}/>
           </Box>
         )}
       </Box>
