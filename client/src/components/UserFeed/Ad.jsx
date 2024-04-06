@@ -12,7 +12,7 @@ const Ad = () => {
   return (
     <Container>
       <FlexBox>
-        <Text color={dark} variant="h10" fontWeight="200">
+        <Text color={dark} variant="h5" fontWeight="200">
           Sponsored
         </Text>
       </FlexBox>

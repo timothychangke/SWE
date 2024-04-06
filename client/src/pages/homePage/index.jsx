@@ -67,10 +67,16 @@ const HomePage = () => {
                 <Box m="0.2rem 0" />
                 <Text
                   color={main}
-                  variant="h10"
+                  variant="h6"
                   fontWeight="100"
-                  margin="5%"
+                  marginLeft="5%"
                   onClick={handleClick}
+                  sx={{
+                    '&:hover': {
+                      color: palette.primary.light,
+                      cursor: 'pointer',
+                    },
+                  }}
                 >
                   Remove ad for $1.99/month?
                 </Text>
