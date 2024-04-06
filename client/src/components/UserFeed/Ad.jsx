@@ -25,7 +25,7 @@ const Ad = () => {
       />
       <FlexBox>
         <Text color={main}>IronClad steakhouse</Text>
-        <Text color={medium}>3 River Valley Road</Text>
+        <Text color={main}>3 River Valley Road</Text>
       </FlexBox>
       <Text color={medium} m="0.5rem 0">
         The Ironclad: Downtown's finest steaks. Aged beef, perfect cuts,

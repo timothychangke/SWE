@@ -13,13 +13,17 @@ import {
   EditOutlined,
   EmailOutlined,
   DescriptionOutlined,
+  Lock,
 } from '@mui/icons-material';
 import { Box, Typography as Text, Divider, useTheme } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
+import Button from '@mui/material/Button';
 
 /**
  * This React component, `User`, displays a user profile. It fetches user data (name, bio, friends, etc.) from the backend based on a user ID and leverages Redux to access the token for authorization.
- * The component renders user information, friend count, bio, profile view count (placeholder for now), and contact details. 
- * 
+ * The component renders user information, friend count, bio, profile view count (placeholder for now), and contact details.
+ *
  * @date 27/03/2024 - 01:07:16
  *
  * @export
@@ -52,8 +56,7 @@ export default function User({ userId, picturePath }) {
   //get friends from redux store to calculate friends list
   const friends = useSelector((state) => state.user.friends);
   //get posts from redux store
-  const posts  = useSelector((state) => state.posts)
-
+  const posts = useSelector((state) => state.posts);
 
   //call backend to get user
   const getUser = async () => {
@@ -80,7 +83,7 @@ export default function User({ userId, picturePath }) {
 
   //destructure the User object
   const { firstName, lastName, bio, email, _id } = user;
-  
+
   return (
     <Container>
       <FlexBox
@@ -101,7 +104,11 @@ export default function User({ userId, picturePath }) {
             >
               {firstName} {lastName}
             </Text>
-            <Text color={medium}>{friends.length == 1 ? `${friends.length} friend` : `${friends.length} friends`}</Text>
+            <Text color={medium}>
+              {friends.length == 1
+                ? `${friends.length} friend`
+                : `${friends.length} friends`}
+            </Text>
           </Box>
         </FlexBox>
         <ManageAccountsOutlined />
@@ -115,14 +122,37 @@ export default function User({ userId, picturePath }) {
       </Box>
       <Divider />
       <Box p="1rem 0">
-        <FlexBox mb="0.5rem">
-          <Text color={medium}>Profile viewers</Text>
-          <Text color={medium} fontWeight="500">
-            {profileViewer}
-          </Text>
+        <FlexBox>
+          <Text color={medium}>Profile Viewers</Text>
+          <Tooltip
+            TransitionComponent={Zoom}
+            title="Get WhatsCookin+ to unlock this feature"
+            style={{width: '2.2rem'}}
+            placement="top"
+          >
+            <span>
+              <Button disabled>
+                <Lock />
+              </Button>
+            </span>
+          </Tooltip>
         </FlexBox>
         <FlexBox mb="0.5rem">
-          <Text color={medium}>Total Likes</Text>
+          <Text color={medium}>Post Impressions</Text>
+          <Tooltip
+            TransitionComponent={Zoom}
+            title="Get WhatsCookin+ to unlock this feature"
+            style={{width: '2.2rem'}}
+          >
+            <span>
+              <Button disabled>
+                <Lock />
+              </Button>
+            </span>
+          </Tooltip>
+        </FlexBox>
+        <FlexBox mb="0.5rem">
+          <Text color={medium}>Total Likes on Posts</Text>
           <Text color={medium} fontWeight="500">
             {calcOwnLikes(posts, _id)}
           </Text>
@@ -149,7 +179,6 @@ export default function User({ userId, picturePath }) {
               <Text color={{ medium }}>{email}</Text>
             </Box>
           </FlexBox>
-          <EditOutlined sx={{ color: main }} />
         </FlexBox>
       </Box>
     </Container>

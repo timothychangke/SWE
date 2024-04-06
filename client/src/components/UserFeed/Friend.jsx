@@ -10,10 +10,10 @@ import { Box, IconButton, Typography as Text, useTheme } from '@mui/material';
 
 //Friend component
 /**
- * This React component, `Friend`, renders information for a user's friend. It retrieves friend data (ID, name, profile picture path) as props, leverages Redux to access user ID, 
- * token, and friend list, and utilizes Material-UI components for styling. The component displays the friend's profile picture, name, 
- * and a button to add/remove them from the friend list using the friend status and an API call upon clicking the button.  
- * 
+ * This React component, `Friend`, renders information for a user's friend. It retrieves friend data (ID, name, profile picture path) as props, leverages Redux to access user ID,
+ * token, and friend list, and utilizes Material-UI components for styling. The component displays the friend's profile picture, name,
+ * and a button to add/remove them from the friend list using the friend status and an API call upon clicking the button.
+ *
  * @date 27/03/2024 - 01:01:30
  *
  * @param {{ friendId: any; firstName: any; lastName: any; userPicturePath: any; }} param0
@@ -28,6 +28,7 @@ const Friend = ({
   firstName,
   lastName,
   userPicturePath,
+  isOtherProfile,
 }) => {
   //get access to the palette via useTheme
   const { palette } = useTheme();
@@ -97,7 +98,7 @@ const Friend = ({
           </Text>
         </Box>
       </FlexBox>
-      {_id !== friendId && (
+      {!isOtherProfile && _id !== friendId && (
         <IconButton
           onClick={() => changeFriendStatus()}
           sx={{ backgroundColor: primaryLight, p: '0.6rem' }}

@@ -18,7 +18,7 @@ import { Box, Typography as Text, useTheme } from '@mui/material';
  * @param {*} param0.userId
  * @returns {*}
  */
-const FriendList = ({ userId }) => {
+const FriendList = ({ userId, isOtherProfile }) => {
   //set color theme for friendlist
   const { palette } = useTheme();
 
@@ -72,6 +72,7 @@ const FriendList = ({ userId }) => {
               firstName={friend.firstName}
               lastName={friend.lastName}
               userPicturePath={friend.picturePath}
+              isOtherProfile={isOtherProfile}
             />
           );
         })}

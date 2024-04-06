@@ -63,7 +63,7 @@ const ProfilePage = () => {
         <Box flexBasis={isNonMobileScreens ? '26%' : undefined} padding='2rem 0rem 2rem 2rem'>
           <User userId={userId} picturePath={user.picturePath} />
           <Box m="2rem 0" />
-          <FriendList userId={userId} />
+          <FriendList userId={userId} isOtherProfile={true}/>
         </Box>
         <Box
           flexBasis={isNonMobileScreens ? '42%' : undefined}
