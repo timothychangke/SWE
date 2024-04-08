@@ -64,7 +64,7 @@ const NavBar = () => {
 
   return (
     <FlexBox padding="1rem 6%" backgroundColor={alt}>
-      <FlexBox gap="0rem" padding='0rem'>
+      <FlexBox gap="0rem" padding="0rem">
         <Typography
           color="primary"
           fontSize="clamp(2rem, 2.6rem, 3rem)"
@@ -103,7 +103,10 @@ const NavBar = () => {
             <IconButton>
               <AccountCircle
                 sx={{ fontSize: '25px' }}
-                onClick={() => navigate(`/profile/${_id}`)}
+                onClick={() => {
+                  navigate(`/profile/${_id}`);
+                  navigate(0);
+                }}
               />
             </IconButton>
             <FormControl variant="standard" value={`${firstName} ${lastName}`}>
