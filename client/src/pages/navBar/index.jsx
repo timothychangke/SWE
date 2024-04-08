@@ -64,10 +64,10 @@ const NavBar = () => {
 
   return (
     <FlexBox padding="1rem 6%" backgroundColor={alt}>
-      <FlexBox gap="0rem">
+      <FlexBox gap="0rem" padding='0rem'>
         <Typography
           color="primary"
-          fontSize="clamp(1rem, 2rem, 2.25rem)"
+          fontSize="clamp(2rem, 2.6rem, 3rem)"
           fontWeight="bold"
           onClick={() => navigate('/home')}
           sx={{
