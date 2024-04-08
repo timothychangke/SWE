@@ -16,7 +16,6 @@ const RecipeDialog = ({ foodName }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('hi');
         const allData = await getAllFoodData(foodName);
         setData(allData);
       } catch (error) {
