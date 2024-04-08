@@ -15,7 +15,6 @@ import User from '../models/User.js';
  * @returns {unknown}
  */
 export const login = async (req, res) => {
-  console.log('hi');
   try {
     const { email, password } = req.body;
     //find the email in mongoose

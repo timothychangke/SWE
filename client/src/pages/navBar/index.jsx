@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMode, setLogout } from 'state';
+import { setMode, setLogout, setModeOnLogout } from 'state';
 import { useNavigate } from 'react-router-dom';
 
 import FlexBox from 'components/UI/FlexBox';
@@ -130,7 +130,12 @@ const NavBar = () => {
                 <option hidden value={`${firstName} ${lastName}`}>
                   <Typography>{`${firstName} ${lastName}`}</Typography>
                 </option>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(setModeOnLogout());
+                    dispatch(setLogout());
+                  }}
+                >
                   Log Out
                 </MenuItem>
               </Select>
@@ -199,7 +204,12 @@ const NavBar = () => {
                 <option hidden value={`${firstName} ${lastName}`}>
                   <Typography>{`${firstName} ${lastName}`}</Typography>
                 </option>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(setModeOnLogout());
+                    dispatch(setLogout());
+                  }}
+                >
                   Log Out
                 </MenuItem>
               </Select>

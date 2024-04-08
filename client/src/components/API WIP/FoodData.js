@@ -13,10 +13,6 @@ const getAllFoodData = async (foodName) => {
     const ingredients = recipeData.ingredientLines;
     const nutrients = recipeData.totalNutrients;
     const recipeUrl = recipeData.url;
-
-    console.log('Ingredients:', ingredients);
-    console.log('Nutrients:', nutrients);
-    console.log(recipeUrl);
     const response = await getChatResponse(
       `Take this URL and give me JUST the recipe of the food on the website and return the message in a very concise step by step format.Do not just give me the ingredients as I already have them.Also Dont say anything else Other than listing down the steps.Also add a newline characte '\n'. ${recipeUrl}`,
     );
