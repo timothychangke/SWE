@@ -15,6 +15,8 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   Insights,
+  Delete,
+  DeleteForever,
 } from '@mui/icons-material';
 import {
   Box,
@@ -76,6 +78,8 @@ const Post = ({
   const [isComments, setIsComments] = useState(false);
   //create state of post comments
   const [postComments, setPostComments] = useState('');
+  //delete button state
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   //likes on the backend is a hashmap of the key being userid and the value being a boolean value of whether the post is liked by that user
   const isLiked = Boolean(likes[loggedInUserId]);
@@ -102,6 +106,34 @@ const Post = ({
     dispatch(setPost({ post: updatedPost }));
   };
 
+  const deletePost = async () => {
+    //an api call to the backend to patch the like status
+    const response = await fetch(
+      `http://localhost:3001/posts/${postId}/delete`,
+      {
+        //patch method is used as liked array is modified partially
+        method: 'DELETE',
+        //authorisation headers
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+        //pass the userId to the backend so that they can keep track on whether the userId has liked the post
+        body: JSON.stringify({ userId: loggedInUserId }),
+      },
+    );
+    //get back the entire post with the updated likes array
+    const updatedResponse = await response.json();
+    if (updatedResponse.error) {
+      //display error message
+      toast.error(updatedResponse.error);
+    } else {
+      //display success message
+      toast.success('Post successfully deleted.');
+      dispatch(setPost({ post: { _id: postId }, type: 'DELETE' }));
+    }
+  };
+
   //handling recipe content from API
   const [showRecipeDialog, setShowRecipeDialog] = useState(false);
   //function to share comments
@@ -124,8 +156,10 @@ const Post = ({
     //get back the entire post with the updated comments
     const updatedPost = await response.json();
     if (updatedPost.error) {
+      //display error message
       toast.error(updatedPost.error);
     } else {
+      //display success message
       toast.success('Comment successfully added.');
       //set Post looks through all the posts to find and replace the newly updated post
       dispatch(setPost({ post: updatedPost }));
@@ -173,9 +207,25 @@ const Post = ({
             <Text>{Object.keys(comments).length}</Text>
           </FlexBox>
         </FlexBox>
-        <IconButton onClick={(() => setShowRecipeDialog(!showRecipeDialog))}>
-          <Insights sx={{ fontSize: '2rem' }} />
-        </IconButton>
+        <FlexBox>
+          <IconButton onClick={() => setShowRecipeDialog(!showRecipeDialog)}>
+            <Insights sx={{ fontSize: '2rem' }} />
+          </IconButton>
+          {loggedInUserId === postUserId && (
+            <IconButton
+              onClick={() => {
+                if (confirmDelete) {
+                  deletePost();
+                } else {
+                  setConfirmDelete(true);
+                }
+              }}
+            >
+              {!confirmDelete && <Delete />}
+              {confirmDelete && <DeleteForever htmlColor="red" />}
+            </IconButton>
+          )}
+        </FlexBox>
       </FlexBox>
       {isComments && (
         <Box mt="0.5rem">

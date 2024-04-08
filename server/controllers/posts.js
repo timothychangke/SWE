@@ -101,6 +101,31 @@ export const likePost = async (req, res) => {
   }
 };
 
+export const deletePost = async (req, res) => {
+  try {
+    //id comes from params
+    const { id } = req.params;
+    //userId comes from body
+    const { userId } = req.body;
+
+    //find post by id
+    const postByUser = await Post.findById(id);
+
+    if (!postByUser) {
+      return res.status(404).json({ error: 'User already exists.' });
+    }
+
+    // Delete the post by id
+    const deletedPost = await Post.findByIdAndDelete(id);
+    //200 status: successful request
+    res.status(200).json({message: 'Post deleted successfully.'})
+    
+  } catch (err) {
+    //404 status: unable to find requested resource
+    res.status(404).json({ messaage: err.message });
+  }
+};
+
 export const addComments = async (req, res) => {
   try {
     //id comes from params

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addComments, getFeedPosts, getUserPosts, likePost } from '../controllers/posts.js';
+import { addComments, getFeedPosts, getUserPosts, likePost, deletePost } from '../controllers/posts.js';
 import { verifyToken } from '../middleware/auth.js';
 
 /**
@@ -21,5 +21,8 @@ router.post('/:id/comment', verifyToken, addComments)
 
 //UPDATE
 router.patch('/:id/like', verifyToken, likePost);
+
+//DELETE
+router.delete('/:id/delete', verifyToken, deletePost);
 
 export default router;
