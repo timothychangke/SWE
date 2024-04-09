@@ -17,9 +17,8 @@ const RecipeDialog = ({ foodName }) => { // Define the component with props
   useEffect(() => { 
     const fetchData = async () => { // Define async function to fetch data
       try {
-        console.log('hi'); // Log to console as part of the debug process
-        const allData = await getAllFoodData(foodName); // Fetch data using the food name
-        setData(allData); // Set the fetched data to state
+        const allData = await getAllFoodData(foodName);
+        setData(allData);
       } catch (error) {
         console.error('Failed to fetch recipe data', error); // Log error if fetching fails
       }

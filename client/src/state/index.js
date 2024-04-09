@@ -41,6 +41,10 @@ export const authSlice = createSlice({
       //toggle between light mode and dark mode
       state.mode = state.mode === 'light' ? 'dark' : 'light';
     },
+    //toggle mode back to light mode on logout
+    setModeOnLogout: (state) => {
+      state.mode = 'light';
+    },
     setShowAd: (state, action) => {
       state.showAd = action.payload.setTo;
     },
@@ -97,6 +101,7 @@ export const authSlice = createSlice({
  */
 export const {
   setMode,
+  setModeOnLogout,
   setLogin,
   setLogout,
   setFriends,

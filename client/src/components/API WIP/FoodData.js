@@ -10,14 +10,10 @@ const getAllFoodData = async (foodName) => { // Define an async function to aggr
       throw new Error('No recipe found for the given food name.'); // Throw an error if no recipes are found
     }
 
-    const recipeData = recipeHits[0].recipe; // Access the first recipe's data
-    const ingredients = recipeData.ingredientLines; // Extract ingredients list
-    const nutrients = recipeData.totalNutrients; // Extract nutritional information
-    const recipeUrl = recipeData.url; // Extract URL of the recipe
-
-    console.log('Ingredients:', ingredients); // Log ingredients to the console
-    console.log('Nutrients:', nutrients); // Log nutrients to the console
-    console.log(recipeUrl); // Log the recipe URL to the console
+    const recipeData = recipeHits[0].recipe;
+    const ingredients = recipeData.ingredientLines;
+    const nutrients = recipeData.totalNutrients;
+    const recipeUrl = recipeData.url;
     const response = await getChatResponse(
       `Take this URL and give me JUST the recipe of the food on the website and return the message in a very concise step by step format. Do not just give me the ingredients as I already have them. Also don't say anything else other than listing down the steps. Also add a newline character '\n'. ${recipeUrl}`, // Request Webscraped Recipe of Food from recipe URL
     );
