@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogin, setShowAd } from 'state';
 import { useState } from 'react';
 import './Login.css';
@@ -55,7 +55,7 @@ const registerSchema = yup.object().shape({
   //Bio must not exceeded the maximum word count
   bio: yup
     .string()
-    .max(150, 'Your Bio has hit the maximum word count')
+    .max(1000, 'Your Bio has hit the maximum word count')
     .required('Bio is required'),
   picture: yup.string().required('Picture is required'),
 });
@@ -360,7 +360,7 @@ function LoginPage() {
                         />
                         <img
                           style={{
-                            width: '1000px',
+                            width: '600px',
                             height: '300px',
                             position: 'relative',
                             right: '125px',
@@ -371,7 +371,7 @@ function LoginPage() {
                         />
                         <img
                           style={{
-                            width: '1000px',
+                            width: '600px',
                             height: '300px',
                             position: 'relative',
                             left: '125px',
