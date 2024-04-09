@@ -63,6 +63,9 @@ export default function Posting({ picturePath }) {
   //create state of post content
   const [postHeader, setPostHeader] = useState('');
 
+  
+  
+  
   //handle post data
   const sharePost = async () => {
     //have to use form data again as we are passing an image
@@ -73,10 +76,20 @@ export default function Posting({ picturePath }) {
     formData.append('postHeader', postHeader);
     //append post description to formData
     formData.append('description', postDesciption);
+    if (postDesciption && postDesciption.length > 200) {
+      toast.error('Post description cannot exceed 200 characters.');
+      return; // Exit the function to prevent further execution
+    }
     if (image) {
-      //append image to formData
+      // Check if image name has a valid extension (.png, .jpg, .jpeg)
+      if (!/\.(png|jpg|jpeg)$/i.test(image.name)) {
+        toast.error('Image must be in .png, .jpg, or .jpeg format.');
+        return; // Exit the function to prevent further execution
+      }
+  
+      // append image to formData
       formData.append('picture', image);
-      //append picture path to formData
+      // append picture path to formData
       formData.append('picturePath', image.name);
     }
     //POST post to backend
