@@ -63,9 +63,6 @@ export default function Posting({ picturePath }) {
   //create state of post content
   const [postHeader, setPostHeader] = useState('');
 
-  
-  
-  
   //handle post data
   const sharePost = async () => {
     //have to use form data again as we are passing an image
@@ -76,8 +73,8 @@ export default function Posting({ picturePath }) {
     formData.append('postHeader', postHeader);
     //append post description to formData
     formData.append('description', postDesciption);
-    if (postDesciption && postDesciption.length > 200) {
-      toast.error('Post description cannot exceed 200 characters.');
+    if (postDesciption && postDesciption.length > 2000) {
+      toast.error('Post description cannot exceed 2000 characters.');
       return; // Exit the function to prevent further execution
     }
     if (image) {
@@ -86,12 +83,11 @@ export default function Posting({ picturePath }) {
         toast.error('Image must be in .png, .jpg, or .jpeg format.');
         return; // Exit the function to prevent further execution
       }
-  
-      // append image to formData
-      formData.append('picture', image);
-      // append picture path to formData
-      formData.append('picturePath', image.name);
     }
+    // append image to formData
+    formData.append('picture', image);
+    // append picture path to formData
+    formData.append('picturePath', image.name);
     //POST post to backend
     const response = await fetch(`http://localhost:3001/posts`, {
       //method is set to POST
@@ -107,7 +103,7 @@ export default function Posting({ picturePath }) {
       //push a toast error notification of the error message
       toast.error(posts.error);
     } else {
-      toast.success('Successfully posted!')
+      toast.success('Successfully posted!');
       //dispatch setPost action to set new post
       dispatch(setPosts({ posts }));
       //reset image state back to null
@@ -190,12 +186,17 @@ export default function Posting({ picturePath }) {
                   )}
                 </Box>
                 {image && (
-                  <IconButton
-                    onClick={() => setImage(null)}
-                    sx={{ width: '15%' }}
-                  >
-                    <DeleteOutlined />
-                  </IconButton>
+                  <Box sx={{ width: '10%' }}>
+                    <IconButton
+                      onClick={() => setImage(null)}
+                      sx={{
+                        marginLeft: '1.5rem',
+                        borderRadius: '100%'
+                      }}
+                    >
+                      <DeleteOutlined />
+                    </IconButton>
+                  </Box>
                 )}
               </FlexBox>
             )}
