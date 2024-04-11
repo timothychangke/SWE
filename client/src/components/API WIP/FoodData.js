@@ -3,6 +3,13 @@ import getRecipeInfo from './Edamame'; // Import the getRecipeInfo function from
 import axios from 'axios'; // Import axios for HTTP requests
 import getChatResponse from './Chatgpt'; // Import getChatResponse function from local module
 
+/**
+ * Aggregates all relevant food data including recipe information and chatbot response.
+ * 
+ * @param {string} foodName - The name of the food to search for recipe and chat response.
+ * @returns {Promise<Object>} A promise that resolves to an object containing ingredients, nutrients, and formatted recipe content.
+ */
+
 const getAllFoodData = async (foodName) => { // Define an async function to aggregate all relevant food data
   try {
     const recipeHits = await getRecipeInfo(foodName); // Retrieve recipe information

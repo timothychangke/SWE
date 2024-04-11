@@ -1,3 +1,10 @@
+/**
+ * Retrieves a chat response from OpenAI given a prompt.
+ * 
+ * @param {string} prompt - The prompt message to send to OpenAI.
+ * @returns {Promise<object>} A promise that resolves to the response object from OpenAI.
+ * @throws {Error} If there's an error fetching the completion from OpenAI.
+ */
 
 const OpenAI = require('openai'); // Import the OpenAI library
 
