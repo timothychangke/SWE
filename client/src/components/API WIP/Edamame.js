@@ -1,3 +1,9 @@
+/**
+ * Fetches recipe information by food name from the Edamam API.
+ * 
+ * @param {string} foodName - The name of the food to search for recipes.
+ * @returns {Promise<Array>} A promise that resolves to an array containing information about the first recipe hit.
+ */
 
 import Axios from 'axios'; 
 

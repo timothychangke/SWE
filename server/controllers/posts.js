@@ -101,6 +101,16 @@ export const likePost = async (req, res) => {
   }
 };
 
+/**
+ * Deletes a post.
+ * 
+ * @date 27/03/2024 - 00:27:17
+ * @async
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
+
 export const deletePost = async (req, res) => {
   try {
     //id comes from params
@@ -125,6 +135,16 @@ export const deletePost = async (req, res) => {
     res.status(404).json({ messaage: err.message });
   }
 };
+
+/**
+ * Adds comments to a post.
+ * 
+ * @date 27/03/2024 - 00:27:17
+ * @async
+ * @param {*} req - The request object.
+ * @param {*} res - The response object.
+ * @returns {Promise<void>}
+ */
 
 export const addComments = async (req, res) => {
   try {

@@ -33,19 +33,25 @@ import { useNavigate } from 'react-router-dom';
 import UserImage from '../UI/UserImage';
 import FlexBox from '../UI/FlexBox';
 import Container from '../UI/Container';
+import calcOwnLikes from 'utils/calcOwnLikes';
+import calcOwnPosts from 'utils/calcOwnPosts';
 
 import {
   ManageAccountsOutlined,
   EditOutlined,
   EmailOutlined,
   DescriptionOutlined,
+  Lock,
 } from '@mui/icons-material';
 import { Box, Typography as Text, Divider, useTheme } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
+import Button from '@mui/material/Button';
 
 /**
  * This React component, `User`, displays a user profile. It fetches user data (name, bio, friends, etc.) from the backend based on a user ID and leverages Redux to access the token for authorization.
- * The component renders user information, friend count, bio, profile view count (placeholder for now), and contact details. 
- * 
+ * The component renders user information, friend count, bio, profile view count (placeholder for now), and contact details.
+ *
  * @date 27/03/2024 - 01:07:16
  *
  * @export
@@ -75,6 +81,10 @@ export default function User({ userId, picturePath }) {
   const [profileViewer, setProfileViewer] = useState(
     Math.floor(Math.random() * 100),
   );
+  //get friends from redux store to calculate friends list
+  const friends = useSelector((state) => state.user.friends);
+  //get posts from redux store
+  const posts = useSelector((state) => state.posts);
 
   //call backend to get user
   const getUser = async () => {
@@ -100,7 +110,7 @@ export default function User({ userId, picturePath }) {
   }
 
   //destructure the User object
-  const { firstName, lastName, bio, friends, email } = user;
+  const { firstName, lastName, bio, email, _id } = user;
 
   return (
     &lt;Container>
@@ -122,7 +132,11 @@ export default function User({ userId, picturePath }) {
             >
               {firstName} {lastName}
             &lt;/Text>
-            &lt;Text color={medium}>{friends.length} friends&lt;/Text>
+            &lt;Text color={medium}>
+              {friends.length == 1
+                ? `${friends.length} friend`
+                : `${friends.length} friends`}
+            &lt;/Text>
           &lt;/Box>
         &lt;/FlexBox>
         &lt;ManageAccountsOutlined />
@@ -136,22 +150,45 @@ export default function User({ userId, picturePath }) {
       &lt;/Box>
       &lt;Divider />
       &lt;Box p="1rem 0">
-        &lt;FlexBox mb="0.5rem">
-          &lt;Text color={medium}>Profile viewers&lt;/Text>
-          &lt;Text color={medium} fontWeight="500">
-            {profileViewer}
-          &lt;/Text>
+        &lt;FlexBox>
+          &lt;Text color={medium}>Profile Viewers&lt;/Text>
+          &lt;Tooltip
+            TransitionComponent={Zoom}
+            title="Get WhatsCookin+ to unlock this feature"
+            style={{width: '2.2rem'}}
+            placement="top"
+          >
+            &lt;span>
+              &lt;Button disabled>
+                &lt;Lock />
+              &lt;/Button>
+            &lt;/span>
+          &lt;/Tooltip>
         &lt;/FlexBox>
         &lt;FlexBox mb="0.5rem">
-          &lt;Text color={medium}>Total Likes&lt;/Text>
+          &lt;Text color={medium}>Post Impressions&lt;/Text>
+          &lt;Tooltip
+            TransitionComponent={Zoom}
+            title="Get WhatsCookin+ to unlock this feature"
+            style={{width: '2.2rem'}}
+          >
+            &lt;span>
+              &lt;Button disabled>
+                &lt;Lock />
+              &lt;/Button>
+            &lt;/span>
+          &lt;/Tooltip>
+        &lt;/FlexBox>
+        &lt;FlexBox mb="0.5rem">
+          &lt;Text color={medium}>Total Likes on Posts&lt;/Text>
           &lt;Text color={medium} fontWeight="500">
-            wip
+            {calcOwnLikes(posts, _id)}
           &lt;/Text>
         &lt;/FlexBox>
         &lt;FlexBox mb="0.5rem">
           &lt;Text color={medium}>Posts made&lt;/Text>
           &lt;Text color={medium} fontWeight="500">
-            wip
+            {calcOwnPosts(posts, _id)}
           &lt;/Text>
         &lt;/FlexBox>
       &lt;/Box>
@@ -170,7 +207,6 @@ export default function User({ userId, picturePath }) {
               &lt;Text color={{ medium }}>{email}&lt;/Text>
             &lt;/Box>
           &lt;/FlexBox>
-          &lt;EditOutlined sx={{ color: main }} />
         &lt;/FlexBox>
       &lt;/Box>
     &lt;/Container>
@@ -186,13 +222,13 @@ export default function User({ userId, picturePath }) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Axiosrecipecall">Axiosrecipecall</a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Recipe">Recipe</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#OpenAI">OpenAI</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#RecipeDialog">RecipeDialog</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addComments">addComments</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#getAllFoodData">getAllFoodData</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 27 2024 23:39:35 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Apr 11 2024 12:58:58 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

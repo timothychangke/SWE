@@ -6,6 +6,14 @@ import { Box, Tab, Typography as Text } from '@mui/material'; // Import MUI comp
 import { TabContext, TabList, TabPanel } from '@mui/lab'; // Import MUI Lab components for tab functionality
 import CircularProgress from '@mui/material/CircularProgress'; // Import MUI component for loading indicator
 
+/**
+ * Component to display recipe details including ingredients, nutrition facts, and recipe steps.
+ * 
+ * @param {Object} props - The props for the RecipeDialog component.
+ * @param {string} props.foodName - The name of the food to fetch recipe details for.
+ * @returns {JSX.Element} The JSX representation of the RecipeDialog component.
+ */
+
 const RecipeDialog = ({ foodName }) => { // Define the component with props
   const [activeTab, setActiveTab] = useState('recipe'); // State for active tab
   const [data, setData] = useState({ // State to store food data
