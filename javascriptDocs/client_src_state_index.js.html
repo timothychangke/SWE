@@ -30,10 +30,10 @@
 
 //state accessible throughout the entire application
 /**
- * This code sets the initial state for your Redux application. It defines properties for theme (mode), user information (user), authentication token (token), 
- * and post information (posts). The initial theme is light mode, no user is logged in (user is null), and there's no authentication token (token is null). 
+ * This code sets the initial state for your Redux application. It defines properties for theme (mode), user information (user), authentication token (token),
+ * and post information (posts). The initial theme is light mode, no user is logged in (user is null), and there's no authentication token (token is null).
  * Additionally, no posts are loaded initially (posts is an empty array).
- * 
+ *
  * @date 27/03/2024 - 00:47:43
  *
  * @type {{ mode: string; user: any; token: any; posts: {}; }}
@@ -41,6 +41,8 @@
 const initialState = {
   //light mode or dark mode
   mode: 'light',
+  //show add mode
+  showAd: true,
   //user information
   user: null,
   //auth token
@@ -51,9 +53,9 @@ const initialState = {
 
 //the boilerplate code
 /**
- * This code creates a Redux slice named authSlice to manage application state. It defines reducers for actions that update various state properties: 
+ * This code creates a Redux slice named authSlice to manage application state. It defines reducers for actions that update various state properties:
  * theme, user information (upon login), authentication token, friend list (for logged-in users), and post information (fetching and updating individual posts).
- * 
+ *
  * @date 27/03/2024 - 00:47:43
  *
  * @type {*}
@@ -66,6 +68,13 @@ export const authSlice = createSlice({
     setMode: (state) => {
       //toggle between light mode and dark mode
       state.mode = state.mode === 'light' ? 'dark' : 'light';
+    },
+    //toggle mode back to light mode on logout
+    setModeOnLogout: (state) => {
+      state.mode = 'light';
+    },
+    setShowAd: (state, action) => {
+      state.showAd = action.payload.setTo;
     },
     setLogin: (state, action) => {
       //set user state
@@ -93,6 +102,13 @@ export const authSlice = createSlice({
       state.posts = action.payload.posts;
     },
     setPost: (state, action) => {
+      if (action.payload.type == 'DELETE') {
+        const filteredPosts = state.posts.filter(
+          (post) => post._id !== action.payload.post._id,
+        );
+        state.posts = filteredPosts;
+        return;
+      }
       const updatedPosts = state.posts.map((post) => {
         if (post._id === action.payload.post._id) return action.payload.post;
         return post;
@@ -103,17 +119,25 @@ export const authSlice = createSlice({
 });
 
 /**
- * This code destructures the `actions` object from the `authSlice` reducer. It extracts specific actions for easier usage throughout the application. 
- * These actions allow you to modify the Redux state by toggling theme mode (`setMode`), setting user information and token upon login (`setLogin`), 
- * clearing them upon logout (`setLogout`), updating a user's friend list (`setFriends`), managing post information (`setPosts`), and updating individual posts (`setPost`).  
- * 
+ * This code destructures the `actions` object from the `authSlice` reducer. It extracts specific actions for easier usage throughout the application.
+ * These actions allow you to modify the Redux state by toggling theme mode (`setMode`), setting user information and token upon login (`setLogin`),
+ * clearing them upon logout (`setLogout`), updating a user's friend list (`setFriends`), managing post information (`setPosts`), and updating individual posts (`setPost`).
+ *
  * @date 27/03/2024 - 00:47:43
  *
  * @type {*}
  */
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
-  authSlice.actions;
-export default authSlice.reducer
+export const {
+  setMode,
+  setModeOnLogout,
+  setLogin,
+  setLogout,
+  setFriends,
+  setPosts,
+  setPost,
+  setShowAd,
+} = authSlice.actions;
+export default authSlice.reducer;
 </code></pre>
         </article>
     </section>
@@ -124,13 +148,13 @@ export default authSlice.reducer
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Axiosrecipecall">Axiosrecipecall</a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Recipe">Recipe</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#OpenAI">OpenAI</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#RecipeDialog">RecipeDialog</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addComments">addComments</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#getAllFoodData">getAllFoodData</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 27 2024 23:39:35 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Apr 11 2024 12:58:58 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

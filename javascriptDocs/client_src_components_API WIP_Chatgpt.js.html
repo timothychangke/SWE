@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: server/routes/auth.js</title>
+    <title>JSDoc: Source: client/src/components/API WIP/Chatgpt.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: server/routes/auth.js</h1>
+    <h1 class="page-title">Source: client/src/components/API WIP/Chatgpt.js</h1>
 
     
 
@@ -26,25 +26,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import express from 'express';
-import { login } from '../controllers/auth.js';
-import {register} from '../controllers/auth.js'
-
-/**
- * This line in your Express application creates an instance of an Express router.  An Express router acts like a mini-application, 
- * allowing you to group related routes together and define middleware specific to that group of routes. 
+            <pre class="prettyprint source linenums"><code>/**
+ * Retrieves a chat response from OpenAI given a prompt.
  * 
- * @date 27/03/2024 - 00:40:04
- *
- * @type {*}
+ * @param {string} prompt - The prompt message to send to OpenAI.
+ * @returns {Promise&lt;object>} A promise that resolves to the response object from OpenAI.
+ * @throws {Error} If there's an error fetching the completion from OpenAI.
  */
-const router = express.Router();
 
-//POST
-//so the route is '/auth/login'
-router.post("/login", login);
+const OpenAI = require('openai'); // Import the OpenAI library
 
-export default router;
+const API_KEY = process.env.REACT_APP_OPENAI_KEY; // Retrieve the API key from environment variables
+const openai = new OpenAI({ // Initialize OpenAI with the API key
+  apiKey: API_KEY, 
+  dangerouslyAllowBrowser: true, 
+});
+
+const getChatResponse = async (prompt) => { // Define an asynchronous function to get chat response
+  try {
+    const response = await openai.chat.completions.create({ // Make an API call to OpenAI to get chat completions
+      model: 'gpt-4', // Specify the model to be used, in this case is GPT-4 to allow Webscraping feature
+      messages: [{ role: 'user', content: prompt }], // Define the prompt message with user role
+    });
+    return response; // Return the response received from OpenAI
+  } catch (error) {
+    console.error('Error fetching completion:', error); // Log error to the console if the API call fails
+    throw error; 
+  }
+};
+
+export default getChatResponse; 
 </code></pre>
         </article>
     </section>

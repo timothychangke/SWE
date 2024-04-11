@@ -34,6 +34,7 @@ import FlexBox from 'components/UI/FlexBox';
 import Dropzone from 'react-dropzone';
 import UserImage from 'components/UI/UserImage';
 import Container from 'components/UI/Container';
+import { toast } from 'react-hot-toast';
 
 import {
   EditOutlined,
@@ -52,10 +53,10 @@ import {
 } from '@mui/material';
 
 /**
- * This React component, MyPostWidget, allows users to create social media posts. It leverages Redux to access user ID and token, Material-UI components for styling, 
- * and a third-party library for drag-and-drop image uploads. The component provides sections for entering a post title, description, and optionally attaching an image. 
+ * This React component, MyPostWidget, allows users to create social media posts. It leverages Redux to access user ID and token, Material-UI components for styling,
+ * and a third-party library for drag-and-drop image uploads. The component provides sections for entering a post title, description, and optionally attaching an image.
  * Users can share their post upon filling in the required fields (title and description).
- * 
+ *
  * @date 27/03/2024 - 01:04:49
  *
  * @export
@@ -100,12 +101,21 @@ export default function Posting({ picturePath }) {
     formData.append('postHeader', postHeader);
     //append post description to formData
     formData.append('description', postDesciption);
-    if (image) {
-      //append image to formData
-      formData.append('picture', image);
-      //append picture path to formData
-      formData.append('picturePath', image.name);
+    if (postDesciption &amp;&amp; postDesciption.length > 2000) {
+      toast.error('Post description cannot exceed 2000 characters.');
+      return; // Exit the function to prevent further execution
     }
+    if (image) {
+      // Check if image name has a valid extension (.png, .jpg, .jpeg)
+      if (!/\.(png|jpg|jpeg)$/i.test(image.name)) {
+        toast.error('Image must be in .png, .jpg, or .jpeg format.');
+        return; // Exit the function to prevent further execution
+      }
+    }
+    // append image to formData
+    formData.append('picture', image);
+    // append picture path to formData
+    formData.append('picturePath', image.name);
     //POST post to backend
     const response = await fetch(`http://localhost:3001/posts`, {
       //method is set to POST
@@ -116,30 +126,37 @@ export default function Posting({ picturePath }) {
     });
     //async function to obtain post response
     const posts = await response.json();
-    //dispatch setPost action to set new post
-    dispatch(setPosts({ posts }));
-    //reset image state back to null
-    setImage(null);
-    //reset post description state back to an empty string
-    setPostDescription('');
-    //reset post header state back to an empty string
-    setPostHeader('');
+    //if there was error in posts
+    if (posts.error) {
+      //push a toast error notification of the error message
+      toast.error(posts.error);
+    } else {
+      toast.success('Successfully posted!');
+      //dispatch setPost action to set new post
+      dispatch(setPosts({ posts }));
+      //reset image state back to null
+      setImage(null);
+      //reset post description state back to an empty string
+      setPostDescription('');
+      //reset post header state back to an empty string
+      setPostHeader('');
+    }
   };
 
   return (
     &lt;Container>
-      &lt;FlexBox width='100%'>
+      &lt;FlexBox width="100%">
         &lt;Text
           fontWeight="bold"
-          fontSize="24px"
+          fontSize="28px"
           color="primary"
           paddingBottom={'8px'}
-          margin='auto'
+          margin="auto"
         >
           GOOD FOOD MUST SHARE!
         &lt;/Text>
       &lt;/FlexBox>
-      &lt;Divider sx={{ margin: '0 0 1.25rem 0' }}/>
+      &lt;Divider sx={{ margin: '0 0 1.25rem 0' }} />
       &lt;FlexBox gap="1.5rem" paddingBottom="1rem">
         &lt;UserImage image={picturePath} />
         &lt;InputBase
@@ -197,12 +214,17 @@ export default function Posting({ picturePath }) {
                   )}
                 &lt;/Box>
                 {image &amp;&amp; (
-                  &lt;IconButton
-                    onClick={() => setImage(null)}
-                    sx={{ width: '15%' }}
-                  >
-                    &lt;DeleteOutlined />
-                  &lt;/IconButton>
+                  &lt;Box sx={{ width: '10%' }}>
+                    &lt;IconButton
+                      onClick={() => setImage(null)}
+                      sx={{
+                        marginLeft: '1.5rem',
+                        borderRadius: '100%'
+                      }}
+                    >
+                      &lt;DeleteOutlined />
+                    &lt;/IconButton>
+                  &lt;/Box>
                 )}
               &lt;/FlexBox>
             )}
@@ -248,13 +270,13 @@ export default function Posting({ picturePath }) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Axiosrecipecall">Axiosrecipecall</a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Recipe">Recipe</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#OpenAI">OpenAI</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#RecipeDialog">RecipeDialog</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addComments">addComments</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#getAllFoodData">getAllFoodData</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 27 2024 23:39:35 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Apr 11 2024 12:58:58 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

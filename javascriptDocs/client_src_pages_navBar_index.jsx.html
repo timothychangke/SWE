@@ -28,12 +28,14 @@
         <article>
             <pre class="prettyprint source linenums"><code>import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMode, setLogout } from 'state';
+import { setMode, setLogout, setModeOnLogout } from 'state';
 import { useNavigate } from 'react-router-dom';
 
 import FlexBox from 'components/UI/FlexBox';
 import logoLMnoname from '../../assets/images/logos/Logo_LightMode_WithoutName.png';
 import logoDMnoname from '../../assets/images/logos/Logo_DarkMode_WithoutName.png';
+
+import './NavBar.css';
 
 import {
   Box,
@@ -59,7 +61,7 @@ import {
 
 /**
  * Responsive navbar with user menu, theme toggle, and logout (Redux). (Mobile dropdown)
- * 
+ *
  * @date 27/03/2024 - 00:46:45
  *
  * @returns {*}
@@ -75,7 +77,6 @@ const NavBar = () => {
   //check if screen is a mobile screen based on width length
   const isNotMobileScreen = useMediaQuery('(min-width: 1000px)');
 
-  
   //dispatch actions from the redux store
   const dispatch = useDispatch();
   //navigate to different routes in app
@@ -91,10 +92,10 @@ const NavBar = () => {
 
   return (
     &lt;FlexBox padding="1rem 6%" backgroundColor={alt}>
-      &lt;FlexBox gap="0rem">
+      &lt;FlexBox gap="0rem" padding="0rem">
         &lt;Typography
           color="primary"
-          fontSize="clamp(1rem, 2rem, 2.25rem)"
+          fontSize="clamp(2rem, 2.6rem, 3rem)"
           fontWeight="bold"
           onClick={() => navigate('/home')}
           sx={{
@@ -106,54 +107,69 @@ const NavBar = () => {
         >
           What's cookin
         &lt;/Typography>
-        &lt;img
-          width="120"
-          height="60"
-          style={{ objectFit: 'cover' }}
-          src={theme.palette.mode === 'dark' ? logoDMnoname : logoLMnoname}
-          alt="logo"
-        />
       &lt;/FlexBox>
+
       {isNotMobileScreen ? (
-        &lt;FlexBox gap="2rem">
-          &lt;IconButton onClick={() => dispatch(setMode())}>
-            {theme.palette.mode === 'dark' ? (
-              &lt;DarkMode sx={{ fontSize: '25px' }} />
-            ) : (
-              &lt;LightMode sx={{ color: dark, fontSize: '25px' }} />
-            )}
-          &lt;/IconButton>
-          &lt;IconButton>
-            &lt;AccountCircle
-              sx={{ fontSize: '25px' }}
-              onClick={() => navigate(`/profile/${_id}`)}
+        &lt;>
+          &lt;div className="logo" style={{ justifyContent: 'center' }}>
+            &lt;img
+              width="120"
+              height="60"
+              style={{ objectFit: 'cover' }}
+              src={theme.palette.mode === 'dark' ? logoDMnoname : logoLMnoname}
+              alt="logo"
             />
-          &lt;/IconButton>
-          &lt;FormControl variant="standard" value={`${firstName} ${lastName}`}>
-            &lt;Select
-              value={`${firstName} ${lastName}`}
-              sx={{
-                backgroundColor: neutralLight,
-                width: '150px',
-                borderRadius: '0.25rem',
-                p: '0.25rem 1rem',
-                '&amp; .MuiSvgIcon-root': {
-                  pr: '0.25rem',
-                  width: '3rem',
-                },
-                '&amp; .MuiSelect-seelct:focus': {
+          &lt;/div>
+          &lt;FlexBox gap="2rem">
+            &lt;IconButton onClick={() => dispatch(setMode())}>
+              {theme.palette.mode === 'dark' ? (
+                &lt;DarkMode sx={{ fontSize: '25px' }} />
+              ) : (
+                &lt;LightMode sx={{ color: dark, fontSize: '25px' }} />
+              )}
+            &lt;/IconButton>
+            &lt;IconButton>
+              &lt;AccountCircle
+                sx={{ fontSize: '25px' }}
+                onClick={() => {
+                  navigate(`/profile/${_id}`);
+                  navigate(0);
+                }}
+              />
+            &lt;/IconButton>
+            &lt;FormControl variant="standard" value={`${firstName} ${lastName}`}>
+              &lt;Select
+                value={`${firstName} ${lastName}`}
+                sx={{
                   backgroundColor: neutralLight,
-                },
-              }}
-              input={&lt;InputBase />}
-            >
-              &lt;option hidden value={`${firstName} ${lastName}`}>
-                &lt;Typography>{`${firstName} ${lastName}`}&lt;/Typography>
-              &lt;/option>
-              &lt;MenuItem onClick={() => dispatch(setLogout())}>Log Out&lt;/MenuItem>
-            &lt;/Select>
-          &lt;/FormControl>
-        &lt;/FlexBox>
+                  width: '150px',
+                  borderRadius: '0.25rem',
+                  p: '0.25rem 1rem',
+                  '&amp; .MuiSvgIcon-root': {
+                    pr: '0.25rem',
+                    width: '3rem',
+                  },
+                  '&amp; .MuiSelect-seelct:focus': {
+                    backgroundColor: neutralLight,
+                  },
+                }}
+                input={&lt;InputBase />}
+              >
+                &lt;option hidden value={`${firstName} ${lastName}`}>
+                  &lt;Typography>{`${firstName} ${lastName}`}&lt;/Typography>
+                &lt;/option>
+                &lt;MenuItem
+                  onClick={() => {
+                    dispatch(setModeOnLogout());
+                    dispatch(setLogout());
+                  }}
+                >
+                  Log Out
+                &lt;/MenuItem>
+              &lt;/Select>
+            &lt;/FormControl>
+          &lt;/FlexBox>
+        &lt;/>
       ) : (
         &lt;IconButton onClick={() => setIsMobileMenuShown(!isMobileMenuShown)}>
           &lt;Menu />
@@ -216,7 +232,12 @@ const NavBar = () => {
                 &lt;option hidden value={`${firstName} ${lastName}`}>
                   &lt;Typography>{`${firstName} ${lastName}`}&lt;/Typography>
                 &lt;/option>
-                &lt;MenuItem onClick={() => dispatch(setLogout())}>
+                &lt;MenuItem
+                  onClick={() => {
+                    dispatch(setModeOnLogout());
+                    dispatch(setLogout());
+                  }}
+                >
                   Log Out
                 &lt;/MenuItem>
               &lt;/Select>
@@ -239,13 +260,13 @@ export default NavBar;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Axiosrecipecall">Axiosrecipecall</a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#Recipe">Recipe</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#OpenAI">OpenAI</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#RecipeDialog">RecipeDialog</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addComments">addComments</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#getAllFoodData">getAllFoodData</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 27 2024 23:39:35 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Apr 11 2024 12:58:58 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
