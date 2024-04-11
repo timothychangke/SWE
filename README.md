@@ -1,5 +1,9 @@
 # SC2006 What's cookin - a Food Social Media
 
+
+https://github.com/timothychangke/WhatsCookin/assets/101695218/9ab9e289-9614-4914-9849-41e3638cfa80
+
+
 This repository contains a full-stack web application built with React.js for the frontend and Node.js for the backend. The frontend utilises bootrap and material ui for styling. The backend is built with Express.js and utilizes MongoDB for data storage.
 
 ## Prerequisites
