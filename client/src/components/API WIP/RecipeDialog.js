@@ -71,7 +71,7 @@ const RecipeDialog = ({ foodName }) => {
       <TabContext value={tabValue}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <TabList onChange={handleChange}>
-            <Tab label="Ingridents" value={'1'} />
+            <Tab label="Ingredients" value={'1'} />
             <Tab label="Nutrition" value={'2'} />
             <Tab label="Recipe" value={'3'} />
           </TabList>
