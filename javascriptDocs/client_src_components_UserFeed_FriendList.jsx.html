@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: client/src/components/UserFeed/FriendList.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: client/src/components/UserFeed/FriendList.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFriends } from 'state';
+
+import Friend from './Friend';
+import Container from 'components/UI/Container';
+
+import { Box, Typography as Text, useTheme } from '@mui/material';
+
+//component that displays the friend list
+/**
+ * This React component, FriendList, fetches and displays a user's friend list. It retrieves the user ID via props, uses Redux to access the user's token and friend data, 
+ * and leverages Material-UI for styling. Upon component rendering, it makes an API call to fetch friends' information and renders individual Friend components for each friend within a styled container.
+ * 
+ * @date 27/03/2024 - 01:03:04
+ *
+ * @param {{ userId: any; }} param0
+ * @param {*} param0.userId
+ * @returns {*}
+ */
+const FriendList = ({ userId, isOtherProfile }) => {
+  //set color theme for friendlist
+  const { palette } = useTheme();
+
+  //get token from redux store
+  const token = useSelector((state) => state.token);
+  //get friends from redux store
+  const friends = useSelector((state) => state.user.friends);
+
+  //allow dispatch actions to be called
+  const dispatch = useDispatch();
+
+  //function to get a list of the users friends based on the user id
+  const getFriends = async () => {
+    //api call to backend
+    const response = await fetch(
+      `http://localhost:3001/users/${userId}/friends`,
+      {
+        //get method to get friends
+        method: 'GET',
+        //authorisation header
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    //wait for data from the backend to come back
+    const data = await response.json();
+    //set friends in redux store
+    dispatch(setFriends({ friends: data }));
+  };
+
+  //get friends everytime the page reloads
+  useEffect(() => {
+    getFriends();
+  }, []);
+
+  return (
+    &lt;Container>
+      &lt;Text
+        color={palette.neutral.dark}
+        variant="h5"
+        fontWeight="500"
+        sx={{ mb: '1.5rem', ml: '1rem'}}
+      >
+        Friend List
+      &lt;/Text>
+      &lt;Box display="flex" flexDirection="column" gap="1.5rem">
+        {friends.map((friend) => {
+          return (
+            &lt;Friend
+              key={friend._id}
+              friendId={friend.id}
+              firstName={friend.firstName}
+              lastName={friend.lastName}
+              userPicturePath={friend.picturePath}
+              isOtherProfile={isOtherProfile}
+            />
+          );
+        })}
+      &lt;/Box>
+    &lt;/Container>
+  );
+};
+
+export default FriendList;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html"></a></li><li><a href="global.html#Container">Container</a></li><li><a href="global.html#FlexBox">FlexBox</a></li><li><a href="global.html#Friend">Friend</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#HomePage">HomePage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#LoginStartState">LoginStartState</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#OpenAI">OpenAI</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#Posts">Posts</a></li><li><a href="global.html#ProfilePage">ProfilePage</a></li><li><a href="global.html#RecipeDialog">RecipeDialog</a></li><li><a href="global.html#User">User</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#addComments">addComments</a></li><li><a href="global.html#addRemoveFriend">addRemoveFriend</a></li><li><a href="global.html#authSlice">authSlice</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#getAllFoodData">getAllFoodData</a></li><li><a href="global.html#getFeedPosts">getFeedPosts</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserFriends">getUserFriends</a></li><li><a href="global.html#getUserPosts">getUserPosts</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#likePost">likePost</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginSchema">loginSchema</a></li><li><a href="global.html#postSchema">postSchema</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#registerSchema">registerSchema</a></li><li><a href="global.html#registerStartState">registerStartState</a></li><li><a href="global.html#router">router</a></li><li><a href="global.html#verifyToken">verifyToken</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Apr 11 2024 12:58:58 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
